@@ -11,6 +11,7 @@ group :development do
   gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
+#gem 'sinatra'
 #gem 'mysql2'
 gem 'jquery-rails'
 gem 'instagram'
