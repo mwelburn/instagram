@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
-    <%= stylesheet_link_tag "application" %>
-    <%= javascript_include_tag :defaults %>
-    <%= csrf_meta_tag %>
-    <%= yield(:head) %>
-  </head>
-  <body>
-    <div id="container">
-      <% flash.each do |name, msg| %>
-        <%= content_tag :div, msg, :id => "flash_#{name}" %>
-      <% end %>
-      <%= content_tag :h1, yield(:title) if show_title? %>
-      <%= yield %>
-    </div>
-  </body>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <title>Instagram</title>
+  <%= stylesheet_link_tag :all %>
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=true&amp;key=ABQIAAAAIao_pqN15R-rciPTw_IW4RS60XJ-V1g0CtfxrQRyiVs2LgiF7RTG4bbUx1waaQOkNs-NDTgo78hbFg" %>
+  <%= csrf_meta_tag %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
 </html>

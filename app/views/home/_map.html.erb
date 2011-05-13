@@ -1,0 +1,95 @@
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript">
+  var map;
+  var data = {};
+
+  var counter = 0;
+
+  <% all_media.each do |media| %>
+      $(data).data(counter, {
+          "id" : counter,
+          <% if media.caption != nil %>
+          "caption_title" : "<%= media.caption.title %>",
+          <% end %>
+          <% if media.location != nil %>
+          "location_name" : "<%= media.location.name %>",
+          "latitude" : "<%= media.location.latitude %>",
+          "longitude" : "<%= media.location.longitude %>",
+          <% end %>
+          "img_low" : "<%= media.images.low_resolution %>",
+          "img_standard" : "<%= media.images.standard_resolution %>",
+          "img_thumbnail" : "<%= media.images.thumbnail %>"
+      });
+    counter++;
+  <% end %>
+
+  var addMarker = function(id) {
+    var latlng = new google.maps.LatLng($(data).data(id).latitude, $(data).data(id).longitude);
+    var marker = new google.maps.Marker({
+       position: latlng,
+       map: map,
+       title: $(data).data(id).caption_title
+    });
+
+    google.maps.event.addListener(marker, 'mouseover', function() {
+        var caption_title = $(data).data(id).caption_title;
+        var location_name = $(data).data(id).location_name;
+        var img_thumbnail = $(data).data(id).img_thumbnail;
+
+        var contentString = '<h1 id="firstHeading" class="firstHeading">' + caption_title + '</h1>' +
+                '<h2 id="secondHeading" class="secondHeading">' + location_name + '</h2>' +
+                '<img src="' + img_thumbnail + '" />';
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        infowindow.open(marker);
+
+        google.maps.event.addListener(infowindow, 'mouseout', function() {
+            infowindow.close();
+        })
+
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+        var caption_title = $(data).data(id).caption_title;
+        var location_name = $(data).data(id).location_name;
+        var img_standard = $(data).data(id).img_standard;
+
+        var contentString = '<h1 id="firstHeading" class="firstHeading">' + caption_title + '</h1>' +
+                '<h2 id="secondHeading" class="secondHeading">' + location_name + '</h2>' +
+                '<img src="' + img_standard + '" />';
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        infowindow.open(marker);
+    });
+  }
+
+  var initialize = function() {
+    var latlng = new google.maps.LatLng(41.872944, -97.647912);
+    var myOptions = {
+      zoom: 4,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+
+    <% @media.each do |media| %>
+      addMarker("<%= media.id %>");
+    <% end %>
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+
+<div id="map_canvas" style="height:100%;width:100%;"></div>
