@@ -12,8 +12,10 @@ class HomeController < ApplicationController
   
   def index
     client = Instagram.client
-    @media = client.media_popular
-    #render :text => @media
+    all_media = client.media_popular
+    #render :json => all_media
+
+     @media = all_media
   end
 
   def user
